@@ -1,7 +1,7 @@
 {
  "name": "@sabaki-js/plugin-template",
  "domain": "mon_domaine",
- "version": "0.1.0",
+ "version": "1.0.0",
  "questions": [
   "ma_question"
  ],

@@ -1,6 +1,6 @@
 {
 	"name": "@sabaki-js/plugin-template",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"license": "MIT",
 	"description": "Template de plugin sabaki \u2014 copiez ce repo, renommez, impl\u00e9mentez classify.",
 	"repository": {

@@ -1,21 +1,20 @@
+<img src="https://raw.githubusercontent.com/sabaki-js/sabaki/main/assets/logo.svg" width="120" alt="sabaki logo" />
+
 # @sabaki-js/plugin-template
 
-Starter template for a [sabaki](https://github.com/sabaki-js/sabaki) plugin.
-Click **Use this template**, rename the package, implement `classify` — done.
+[![npm](https://img.shields.io/npm/v/%40sabaki-js%2Fplugin-template)](https://www.npmjs.com/package/%40sabaki-js%2Fplugin-template) [![license](https://img.shields.io/npm/l/%40sabaki-js%2Fplugin-template)](https://github.com/sabaki-js/plugin-template#readme) [![CI](https://github.com/sabaki-js/plugin-template/actions/workflows/test-battery.yml/badge.svg)](https://github.com/sabaki-js/plugin-template/actions)
 
-## Three ways to build a plugin
+Starter template for a sabaki plugin.
 
-1. **Ad-hoc** (`definePlugin`) — no training, a function is enough.
-2. **`nano`** (`nanoClassifier` + TF-IDF weights) — kilobytes, <1 ms, zero dependencies.
-3. **`mini`** (`miniClassifier` + ONNX) — semantic understanding, ~20 ms.
-
-See `src/index.ts` (commented examples) and `src/manifest.json` (annotated fields).
+Three patterns: `definePlugin` (ad-hoc), `nanoClassifier` (TF-IDF), `miniClassifier` (ONNX). Click Use this template.
 
 ## Publish
 
 ```sh
 npm version patch && npm run publish-package  # tags v* -> CI publishes to npm
 ```
+
+Part of [sabaki](https://github.com/sabaki-js/sabaki) — see the [GUIDE](https://github.com/sabaki-js/sabaki/blob/main/GUIDE.md).
 
 ## License
 

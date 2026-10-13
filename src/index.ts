@@ -21,13 +21,13 @@ import { definePlugin } from "sabaki";
 const manifest = manifestData as PluginManifest;
 
 const plugin: SabakiPlugin = definePlugin({
-  manifest,
-  classify: ({ state }) => ({
-    // TODO: remplacez par votre logique (mots-clés, nanoClassifier, appel HTTP…).
-    decision: state.length > 100 ? "long" : "short",
-    confidence: 0.5,
-    domain: manifest.domain,
-  }),
+	manifest,
+	classify: ({ state }) => ({
+		// TODO: remplacez par votre logique (mots-clés, nanoClassifier, appel HTTP…).
+		decision: state.length > 100 ? "long" : "short",
+		confidence: 0.5,
+		domain: manifest.domain,
+	}),
 });
 
 export default plugin;

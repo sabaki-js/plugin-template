@@ -1,13 +1,13 @@
 {
-  "name": "@sabaki-js/plugin-mon-domaine",
-  "domain": "mon_domaine",
-  "version": "0.1.0",
-  "questions": ["ma_question"],
-  "primary": "ma_question",
-  "keywords": ["mot1", "mot2", "mot3"],
-  "threshold": 0.15,
-  "modes": {
-    "nano": "poids TF-IDF embarqués (weights.json) via nanoClassifier",
-    "mini": "ONNX via miniClassifier(manifest, workflow) + decideAsync"
-  }
+	"name": "@sabaki-js/plugin-mon-domaine",
+	"domain": "mon_domaine",
+	"version": "0.1.0",
+	"questions": ["ma_question"],
+	"primary": "ma_question",
+	"keywords": ["mot1", "mot2", "mot3"],
+	"threshold": 0.15,
+	"modes": {
+		"nano": "poids TF-IDF embarqués (weights.json) via nanoClassifier",
+		"mini": "ONNX via miniClassifier(manifest, workflow) + decideAsync"
+	}
 }

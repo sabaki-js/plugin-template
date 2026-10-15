@@ -14,7 +14,7 @@ Three patterns: `definePlugin` (ad-hoc), `nanoClassifier` (TF-IDF), `miniClassif
 npm version patch && npm run publish-package  # tags v* -> CI publishes to npm
 ```
 
-Part of [sabaki](https://github.com/sabaki-js/sabaki) — see the [GUIDE](https://github.com/sabaki-js/sabaki/blob/main/GUIDE.md).
+Part of [sabaki](https://github.com/sabaki-js/sabaki) - see the [GUIDE](https://github.com/sabaki-js/sabaki/blob/main/GUIDE.md).
 
 ## License
 

@@ -1,4 +1,4 @@
-// Template de plugin sabaki — 3 façons de créer un plugin, du plus simple au plus puissant.
+// Template de plugin sabaki - 3 façons de créer un plugin, du plus simple au plus puissant.
 //
 // 1. À la volée (aucun entraînement) :
 //    import { definePlugin } from "sabaki";

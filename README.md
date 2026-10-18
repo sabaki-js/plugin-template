@@ -8,6 +8,23 @@ Starter template for a sabaki plugin.
 
 Three patterns: `definePlugin` (ad-hoc), `nanoClassifier` (TF-IDF), `miniClassifier` (ONNX). Click Use this template.
 
+## Bundled mini weights (no download needed)
+
+Ship ONNX weights inside the package so it works offline:
+
+1. Put the files in `models/<workflow>-int8/` (`<workflow>_int8.onnx`, `<workflow>_int8.onnx.data` if any, `<workflow>.json`, `model.json`, `tokenizer.json`).
+2. Export the dir from `src/index.ts`:
+   ```ts
+   import path from "node:path";
+   import { fileURLToPath } from "node:url";
+   export const modelDir = path.join(
+     path.dirname(fileURLToPath(import.meta.url)),
+     "..", "models", "<workflow>-int8",
+   );
+   ```
+3. Add `"models"` to `package.json` `files`.
+4. Callers pass it explicitly: `miniClassifier(manifest, wf, { modelDir })` (falls back to HF download when absent).
+
 ## Publish
 
 ```sh

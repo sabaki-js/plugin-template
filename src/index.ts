@@ -1,33 +1,72 @@
-// Template de plugin sabaki - 3 façons de créer un plugin, du plus simple au plus puissant.
-//
-// 1. À la volée (aucun entraînement) :
-//    import { definePlugin } from "sabaki";
-//    const plugin = definePlugin({
-//      manifest,
-//      classify: ({ state }) => ({ decision: "other", confidence: 0.5, domain: manifest.domain }),
-//    });
-//
-// 2. Mode nano (poids TF-IDF embarqués, Ko, <1 ms) :
-//    import { nanoClassifier } from "sabaki";
-//    const plugin = nanoClassifier(manifest, weights); // weights: ModelWeights (voir train.py)
-//
-// 3. Mode mini (ONNX minilaya, ~87 Mo téléchargés au 1er usage, ~20 ms) :
-//    import { miniClassifier } from "sabaki";
-//    const plugin = await miniClassifier(manifest, "mon_workflow"); // + classifyAsync / decideAsync
+/**
+ * Template de plugin sabaki — pattern canonique : cross-encoder MiniLM
+ * avec poids ONNX bundlés (`models/<nom>-fp32`), mêmes conventions que
+ * `@sabaki-js/phishing-detection`.
+ *
+ * 1. Entraînez (voir `gpu/train_generalist.py`), exportez
+ *    (`gpu/export_generalist.py`) dans `models/<nom>-fp32/`
+ *    (`generalist.onnx` + `tokenizer/` + `config.json`).
+ * 2. Renseignez `manifest.json` (questions, keywords, `languages` si le
+ *    domaine est partagé avec un autre plugin).
+ * 3. `npm run build && npm test`, tag, release.
+ *
+ * Alternative : Head mini (encodeur + Linear, `logits_<question>`) via
+ * `loadMini(modelDir)` — voir `@sabaki-js/mail` (`models/<wf>-int8/`).
+ * Alternative légère : nano TF-IDF via `nanoClassifier` — voir `train.py`.
+ */
+import {
+	definePlugin,
+	loadGeneralist,
+	type GeneralistInput,
+	type SabakiPlugin,
+} from "sabaki";
+import type { ClassifyOutput, PluginManifest } from "sabaki";
 import manifestData from "./manifest.json" with { type: "json" };
-import type { PluginManifest, SabakiPlugin } from "sabaki";
-import { definePlugin } from "sabaki";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const manifest = manifestData as PluginManifest;
+// TODO: votre question et options par défaut.
+const QUESTION = (manifest.primary ?? manifest.questions[0]) as string;
+const OPTIONS = ["yes", "no"]; // TODO: vos options.
 
-const plugin: SabakiPlugin = definePlugin({
+/** Dossier des poids embarqués (aucun téléchargement requis). */
+export const modelDir = path.join(
+	path.dirname(fileURLToPath(import.meta.url)),
+	"..",
+	"models",
+	// TODO: nommez votre dossier (ex `mon-domaine-fp32`).
+	"TODO-fp32",
+);
+
+export function defineClassifier(
+	modelDirOverride?: string,
+): SabakiPlugin & {
+	classifyAsync: (input: GeneralistInput) => Promise<ClassifyOutput>;
+} {
+	const classifyAsync = async (
+		input: GeneralistInput,
+	): Promise<ClassifyOutput> => {
+		const dir = modelDirOverride ?? process.env.SABAKI_MODEL_DIR ?? modelDir;
+		const r = await loadGeneralist(dir).decide({
+			...input,
+			question: input.question ?? QUESTION,
+			options:
+				input.options && input.options.length >= 2
+					? input.options
+					: OPTIONS,
+		});
+		return { ...r, domain: manifest.domain };
+	};
+	return {
+		...definePlugin({ manifest, classify: classifyAsync }),
+		classifyAsync,
+	};
+}
+
+const plugin: SabakiPlugin = {
 	manifest,
-	classify: ({ state }) => ({
-		// TODO: remplacez par votre logique (mots-clés, nanoClassifier, appel HTTP…).
-		decision: state.length > 100 ? "long" : "short",
-		confidence: 0.5,
-		domain: manifest.domain,
-	}),
-});
-
+	classify: (input) =>
+		defineClassifier().classifyAsync(input as GeneralistInput),
+};
 export default plugin;
